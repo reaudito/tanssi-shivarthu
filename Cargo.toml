@@ -66,6 +66,9 @@ pallet-stream-payment = { path = "pallets/stream-payment", default-features = fa
 pallet-stream-payment-runtime-api = { path = "pallets/stream-payment/rpc/runtime-api", default-features = false }
 pallet-xcm-core-buyer = { path = "pallets/xcm-core-buyer", default-features = false }
 
+## New pallets
+pallet-template = {path = "pallets/template", default-features= false}
+
 container-chain-template-frontier-runtime = { path = "container-chains/runtime-templates/frontier", default-features = false }
 container-chain-template-simple-runtime = { path = "container-chains/runtime-templates/simple", default-features = false }
 
