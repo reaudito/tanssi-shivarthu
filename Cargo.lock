@@ -9322,6 +9322,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-support"
+version = "0.1.0"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-balances",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-arithmetic",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+ "strum 0.24.1",
+]
+
+[[package]]
 name = "pallet-template"
 version = "4.0.0-dev"
 dependencies = [

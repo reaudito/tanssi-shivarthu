@@ -68,6 +68,14 @@ pallet-xcm-core-buyer = { path = "pallets/xcm-core-buyer", default-features = fa
 
 ## New pallets
 pallet-template = {path = "pallets/template", default-features= false}
+pallet-support = {path = "pallets/support", default-features= false}
+
+## Additional dependancies
+sp-arithmetic = { git = "https://github.com/moondance-labs/polkadot-sdk", branch = "tanssi-polkadot-v1.6.0", default-features = false  }
+strum = { version = "0.24", default-features = false, features = ["derive"] }
+
+
+
 
 container-chain-template-frontier-runtime = { path = "container-chains/runtime-templates/frontier", default-features = false }
 container-chain-template-simple-runtime = { path = "container-chains/runtime-templates/simple", default-features = false }
