@@ -4,8 +4,9 @@ use parity_scale_codec::{Decode, Encode};
 use scale_info::TypeInfo;
 
 use frame_support::pallet_prelude::*;
+use frame_system::pallet_prelude::*;
 // use frame_support::sp_std::{vec::Vec};
-use sp_std::{collections::btree_set::BTreeSet, vec, vec::Vec};
+use sp_std::{vec, vec::Vec};
 
 pub type SpaceId = u64;
 pub type PostId = u64;
@@ -19,13 +20,13 @@ pub struct WhoAndWhen<AccountId, BlockNumber, Moment> {
 
 pub type WhoAndWhenOf<T> = WhoAndWhen<
 	<T as frame_system::Config>::AccountId,
-	<T as frame_system::Config>::BlockNumber,
+	BlockNumberFor<T>,
 	<T as pallet_timestamp::Config>::Moment,
 >;
 
 pub fn new_who_and_when<T>(
 	account: T::AccountId,
-) -> WhoAndWhen<T::AccountId, T::BlockNumber, T::Moment>
+) -> WhoAndWhen<T::AccountId, BlockNumberFor<T>, T::Moment>
 where
 	T: frame_system::Config + pallet_timestamp::Config,
 {
