@@ -9141,6 +9141,39 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-sortition-sum-game"
+version = "4.0.0-dev"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+ "trait-sortition-sum-game",
+]
+
+[[package]]
+name = "pallet-spaces"
+version = "4.0.0-dev"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "pallet-support",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
 name = "pallet-staking"
 version = "4.0.0-dev"
 source = "git+https://github.com/moondance-labs/polkadot-sdk?branch=tanssi-polkadot-v1.6.0#7b16c9ecbe06c53affbbb32991875b0c1e5f59f6"
@@ -9278,7 +9311,7 @@ dependencies = [
  "sp-io",
  "sp-runtime",
  "sp-std",
- "strum 0.24.1",
+ "strum 0.26.2",
 ]
 
 [[package]]
@@ -15062,6 +15095,9 @@ name = "strum"
 version = "0.26.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5d8cec3501a5194c432b2b7976db6b7d10ec95c253208b45f83f7136aa985e29"
+dependencies = [
+ "strum_macros 0.26.2",
+]
 
 [[package]]
 name = "strum_macros"
@@ -16105,6 +16141,14 @@ dependencies = [
  "tracing-core",
  "tracing-log",
  "tracing-serde",
+]
+
+[[package]]
+name = "trait-sortition-sum-game"
+version = "0.1.0"
+dependencies = [
+ "frame-support",
+ "parity-scale-codec",
 ]
 
 [[package]]

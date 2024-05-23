@@ -69,10 +69,17 @@ pallet-xcm-core-buyer = { path = "pallets/xcm-core-buyer", default-features = fa
 ## New pallets
 pallet-template = {path = "pallets/template", default-features= false}
 pallet-support = {path = "pallets/support", default-features= false}
+pallet-spaces = {path= "pallets/spaces", default-features=false }
+pallet-sortition-sum-game = {path = "pallets/sortition-sum-game", default-features=false}
+
+## Traits
+trait-sortition-sum-game = {path = "traits/trait-sortition-sum-game", default-features=false}
+trait-shared-storage = {path= "traits/trait-shared-storage", default-features=false}
+trait-schelling-game-shared = {path = "traits/trait-schelling-game-shared", default-features=false}
 
 ## Additional dependancies
 sp-arithmetic = { git = "https://github.com/moondance-labs/polkadot-sdk", branch = "tanssi-polkadot-v1.6.0", default-features = false  }
-strum = { version = "0.24", default-features = false, features = ["derive"] }
+strum = { version = "0.26.2", default-features = false, features = ["derive"] }
 
 
 
