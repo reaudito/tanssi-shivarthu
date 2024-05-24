@@ -66,6 +66,8 @@ pallet-stream-payment = { path = "pallets/stream-payment", default-features = fa
 pallet-stream-payment-runtime-api = { path = "pallets/stream-payment/rpc/runtime-api", default-features = false }
 pallet-xcm-core-buyer = { path = "pallets/xcm-core-buyer", default-features = false }
 
+## New start
+
 ## New pallets
 pallet-template = {path = "pallets/template", default-features= false}
 pallet-support = {path = "pallets/support", default-features= false}
@@ -73,18 +75,22 @@ pallet-spaces = {path= "pallets/spaces", default-features=false }
 pallet-sortition-sum-game = {path = "pallets/sortition-sum-game", default-features=false}
 pallet-shared-storage = {path = "pallets/shared-storage", default-features = false}
 pallet-schelling-game-shared = {path = "pallets/schelling-game-shared", default-features = false }
+pallet-profile-validation = {path = "pallets/profile-validation", default-features = false}
 
 ## Traits
 trait-sortition-sum-game = {path = "traits/trait-sortition-sum-game", default-features=false}
 trait-shared-storage = {path= "traits/trait-shared-storage", default-features=false}
 trait-schelling-game-shared = {path = "traits/trait-schelling-game-shared", default-features=false}
 
+## Api
+profile-validation-runtime-api = {path = "pallets/profile-validation/profile-validation-runtime-api", default-features = false}
 ## Additional dependancies
 sp-arithmetic = { git = "https://github.com/moondance-labs/polkadot-sdk", branch = "tanssi-polkadot-v1.6.0", default-features = false  }
 strum = { version = "0.26.2", default-features = false, features = ["derive"] }
 num-integer = {default-features = false, version= "0.1.44"}
 frame-support-test ={ git = "https://github.com/moondance-labs/polkadot-sdk", branch = "tanssi-polkadot-v1.6.0", default-features = false}
 
+## New end
 
 
 container-chain-template-frontier-runtime = { path = "container-chains/runtime-templates/frontier", default-features = false }
@@ -335,7 +341,7 @@ flume = "0.10.9"
 futures = { version = "0.3.1" }
 futures-timer = "3.0.1"
 hex = { version = "0.4.3", default-features = false }
-jsonrpsee = { version = "0.16.2", features = [ "server" ] }
+jsonrpsee = { version = "0.16.2", features = [ "client-core", "server", "macros" ] }
 num-traits = "0.2.8"
 parking_lot = "0.12.1"
 paste = "1.0.14"
