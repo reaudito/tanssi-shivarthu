@@ -1,6 +1,6 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 use frame_support::dispatch::DispatchResult;
-use frame_support::sp_std::prelude::*;
+use sp_std::prelude::*;
 
 pub trait SchellingGameSharedLink {
 	type SumTreeName;
