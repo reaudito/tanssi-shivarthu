@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 parity-scale-codec = { workspace = true }
-frame-support = { default-features = false, version = "4.0.0-dev", git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.42"}
+frame-support = { workspace = true}
 
 
 
