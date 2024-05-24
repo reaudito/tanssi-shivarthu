@@ -71,6 +71,7 @@ pallet-template = {path = "pallets/template", default-features= false}
 pallet-support = {path = "pallets/support", default-features= false}
 pallet-spaces = {path= "pallets/spaces", default-features=false }
 pallet-sortition-sum-game = {path = "pallets/sortition-sum-game", default-features=false}
+pallet-shared-storage = {path = "pallets/shared_storage", default-features = false}
 
 ## Traits
 trait-sortition-sum-game = {path = "traits/trait-sortition-sum-game", default-features=false}
