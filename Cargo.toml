@@ -76,6 +76,7 @@ pallet-sortition-sum-game = {path = "pallets/sortition-sum-game", default-featur
 pallet-shared-storage = {path = "pallets/shared-storage", default-features = false}
 pallet-schelling-game-shared = {path = "pallets/schelling-game-shared", default-features = false }
 pallet-profile-validation = {path = "pallets/profile-validation", default-features = false}
+pallet-project-tips = {path = "pallets/project-tips", default-features = false}
 
 ## Traits
 trait-sortition-sum-game = {path = "traits/trait-sortition-sum-game", default-features=false}
@@ -83,7 +84,10 @@ trait-shared-storage = {path= "traits/trait-shared-storage", default-features=fa
 trait-schelling-game-shared = {path = "traits/trait-schelling-game-shared", default-features=false}
 
 ## Api
-profile-validation-runtime-api = {path = "pallets/profile-validation/profile-validation-runtime-api", default-features = false}
+profile-validation-runtime-api = { path = "pallets/profile-validation/profile-validation-runtime-api", default-features = false}
+project-tips-runtime-api = { path = "pallets/project-tips/project-tips-runtime-api", default-features = false }
+
+
 ## Additional dependancies
 sp-arithmetic = { git = "https://github.com/moondance-labs/polkadot-sdk", branch = "tanssi-polkadot-v1.6.0", default-features = false  }
 strum = { version = "0.26.2", default-features = false, features = ["derive"] }

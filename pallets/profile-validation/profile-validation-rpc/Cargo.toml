@@ -11,4 +11,4 @@ sc-rpc = {  workspace = true }
 sp-api = {  workspace = true  }
 sp-blockchain = {  workspace = true  }
 sp-runtime = {  workspace = true  }
-profile-validation-runtime-api = { default-features= false, path="../profile-validation-runtime-api"}
+profile-validation-runtime-api = { workspace = true } 
