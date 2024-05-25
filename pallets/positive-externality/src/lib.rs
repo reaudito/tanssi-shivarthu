@@ -24,8 +24,8 @@ use frame_support::sp_runtime::traits::Saturating;
 use frame_support::sp_runtime::SaturatedConversion;
 use sp_std::prelude::*;
 use frame_support::{
-	dispatch::{DispatchResult},
-	ensure, fail,
+	dispatch::DispatchResult,
+	ensure
 };
 use frame_system::pallet_prelude::*;
 use frame_support::pallet_prelude::*;
