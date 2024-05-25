@@ -8937,6 +8937,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-positive-externality"
+version = "4.0.0-dev"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-support-test",
+ "frame-system",
+ "pallet-balances",
+ "pallet-schelling-game-shared",
+ "pallet-shared-storage",
+ "pallet-sortition-sum-game",
+ "pallet-support",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+ "trait-schelling-game-shared",
+ "trait-shared-storage",
+]
+
+[[package]]
 name = "pallet-preimage"
 version = "4.0.0-dev"
 source = "git+https://github.com/moondance-labs/polkadot-sdk?branch=tanssi-polkadot-v1.6.0#7b16c9ecbe06c53affbbb32991875b0c1e5f59f6"

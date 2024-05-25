@@ -77,6 +77,7 @@ pallet-shared-storage = {path = "pallets/shared-storage", default-features = fal
 pallet-schelling-game-shared = {path = "pallets/schelling-game-shared", default-features = false }
 pallet-profile-validation = {path = "pallets/profile-validation", default-features = false}
 pallet-project-tips = {path = "pallets/project-tips", default-features = false}
+pallet-positive-externality = { path = "pallets/positive-externality", default-features = false }
 
 ## Traits
 trait-sortition-sum-game = {path = "traits/trait-sortition-sum-game", default-features=false}
@@ -86,6 +87,14 @@ trait-schelling-game-shared = {path = "traits/trait-schelling-game-shared", defa
 ## Api
 profile-validation-runtime-api = { path = "pallets/profile-validation/profile-validation-runtime-api", default-features = false}
 project-tips-runtime-api = { path = "pallets/project-tips/project-tips-runtime-api", default-features = false }
+positive-externality-runtime-api = { path = "pallets/positive-externality/positive-externality-runtime-api", default-features = false}
+
+
+## Rpc
+profile-validation-rpc = { path = "pallets/profile-validation/profile-validation-rpc", default-features = false}
+project-tips-rpc = { path = "pallets/project-tips/project-tips-rpc", default-features = false }
+positive-externality-rpc = { path = "pallets/positive-externality/positive-externality-rpc", default-features = false}
+
 
 
 ## Additional dependancies

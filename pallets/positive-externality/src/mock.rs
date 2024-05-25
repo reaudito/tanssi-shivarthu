@@ -4,6 +4,7 @@ use frame_support::{
 	parameter_types,
 	traits::{ConstU16, ConstU64},
 };
+use frame_support_test::TestRandomness;
 use sp_core::H256;
 use sp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
@@ -11,14 +12,13 @@ use sp_runtime::{
 };
 
 type Block = frame_system::mocking::MockBlock<Test>;
-use frame_support_test::TestRandomness;
 
 // Configure a mock runtime to test the pallet.
 frame_support::construct_runtime!(
 	pub enum Test 
 	{
 		System: frame_system,
-		ProjectTips: pallet_template,
+		TemplateModule: pallet_template,
 		Balances: pallet_balances,
 		Timestamp: pallet_timestamp,
 		SharedStorage:pallet_shared_storage,
@@ -51,9 +51,13 @@ impl frame_system::Config for Test {
 	type SS58Prefix = ConstU16<42>;
 	type OnSetCode = ();
 	type MaxConsumers = frame_support::traits::ConstU32<16>;
-	type AccountData = pallet_balances::AccountData<u64>; // New code
+	type AccountData = pallet_balances::AccountData<u64>; // N
 }
 
+impl pallet_shared_storage::Config for Test {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = ();
+}
 parameter_types! {
 	pub const MinimumPeriod: u64 = 5;
 }
@@ -63,18 +67,6 @@ impl pallet_timestamp::Config for Test {
 	type OnTimestampSet = ();
 	type MinimumPeriod = MinimumPeriod;
 	type WeightInfo = ();
-}
-
-impl pallet_shared_storage::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = ();
-}
-impl pallet_template::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = ();
-	type SharedStorageSource = SharedStorage;
-	type Currency = Balances; // New code
-	type SchellingGameSharedSource = SchellingGameShared;
 }
 
 impl pallet_balances::Config for Test {
@@ -107,6 +99,14 @@ impl pallet_schelling_game_shared::Config for Test {
 impl pallet_sortition_sum_game::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
+}
+
+impl pallet_template::Config for Test {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = ();
+	type SharedStorageSource = SharedStorage;
+	type Currency = Balances; // New code
+	type SchellingGameSharedSource = SchellingGameShared;
 }
 
 // Build genesis storage according to the mock runtime.
