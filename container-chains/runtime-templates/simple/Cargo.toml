@@ -76,6 +76,24 @@ sp-trie = { workspace = true }
 
 sp-version = { workspace = true }
 
+pallet-insecure-randomness-collective-flip = { workspace = true  }
+
+
+# Local Dependencies
+pallet-template = {  workspace = true }
+pallet-sortition-sum-game = { workspace = true }
+pallet-schelling-game-shared = { workspace = true }
+pallet-profile-validation = { workspace = true }
+pallet-shared-storage = { workspace = true }
+pallet-positive-externality = { workspace = true }
+pallet-department-funding = {  workspace = true }
+pallet-project-tips = { workspace = true }
+profile-validation-runtime-api = { workspace = true }
+positive-externality-runtime-api = {  workspace = true }
+department-funding-runtime-api = { workspace = true }
+project-tips-runtime-api = {  workspace = true }
+
+
 # Polkadot
 pallet-xcm = { workspace = true }
 pallet-xcm-benchmarks = { workspace = true, optional = true }
@@ -179,6 +197,19 @@ std = [
 	"staging-xcm-executor/std",
 	"staging-xcm/std",
 	"xcm-primitives/std",
+    "pallet-insecure-randomness-collective-flip/std",
+   "pallet-template/std",
+   "pallet-sortition-sum-game/std",
+   "pallet-schelling-game-shared/std",
+   "pallet-profile-validation/std",
+   "pallet-shared-storage/std",
+   "pallet-positive-externality/std",
+   "pallet-department-funding/std",
+   "pallet-project-tips/std",
+   "profile-validation-runtime-api/std",
+   "positive-externality-runtime-api/std",
+   "department-funding-runtime-api/std",
+   "project-tips-runtime-api/std",
 ]
 
 # Allow to print logs details (no wasm:stripped)
@@ -223,6 +254,14 @@ runtime-benchmarks = [
 	"staging-xcm-builder/runtime-benchmarks",
 	"staging-xcm-executor/runtime-benchmarks",
 	"xcm-primitives/runtime-benchmarks",
+   "pallet-template/runtime-benchmarks",
+   "pallet-sortition-sum-game/runtime-benchmarks",
+   "pallet-schelling-game-shared/runtime-benchmarks",
+   "pallet-profile-validation/runtime-benchmarks",
+   "pallet-shared-storage/runtime-benchmarks",
+   "pallet-positive-externality/runtime-benchmarks",
+   "pallet-department-funding/runtime-benchmarks",
+   "pallet-project-tips/runtime-benchmarks",
 ]
 
 try-runtime = [
@@ -261,4 +300,12 @@ try-runtime = [
 	"polkadot-runtime-common/try-runtime",
 	"runtime-common/try-runtime",
 	"sp-runtime/try-runtime",
+	 "pallet-template/try-runtime",
+   "pallet-sortition-sum-game/try-runtime",
+   "pallet-schelling-game-shared/try-runtime",
+   "pallet-profile-validation/try-runtime",
+   "pallet-shared-storage/try-runtime",
+   "pallet-positive-externality/try-runtime",
+   "pallet-department-funding/try-runtime",
+   "pallet-project-tips/try-runtime",
 ]

@@ -634,6 +634,70 @@ impl pallet_multisig::Config for Runtime {
     type WeightInfo = weights::pallet_multisig::SubstrateWeight<Runtime>;
 }
 
+
+impl pallet_template::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = pallet_template::weights::SubstrateWeight<Runtime>;
+}
+
+impl pallet_insecure_randomness_collective_flip::Config for Runtime {}
+
+
+impl pallet_sortition_sum_game::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = pallet_sortition_sum_game::weights::SubstrateWeight<Runtime>;
+}
+
+impl pallet_schelling_game_shared::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = pallet_schelling_game_shared::weights::SubstrateWeight<Runtime>;
+	type Currency = Balances;
+	type RandomnessSource = RandomnessCollectiveFlip;
+	type Slash = ();
+	type Reward = ();
+	type SortitionSumGameSource = SortitionSumGame;
+}
+
+impl pallet_profile_validation::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = pallet_profile_validation::weights::SubstrateWeight<Runtime>;
+	type Currency = Balances;
+	type SchellingGameSharedSource = SchellingGameShared;
+	type Slash = ();
+	type Reward = ();
+}
+
+
+
+impl pallet_shared_storage::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = pallet_shared_storage::weights::SubstrateWeight<Runtime>;
+}
+
+impl pallet_positive_externality::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = pallet_positive_externality::weights::SubstrateWeight<Runtime>;
+	type SharedStorageSource = SharedStorage;
+	type Currency = Balances;
+	type SchellingGameSharedSource = SchellingGameShared;
+}
+
+impl pallet_department_funding::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = pallet_department_funding::weights::SubstrateWeight<Runtime>;
+	type SharedStorageSource = SharedStorage;
+	type Currency = Balances;
+	type SchellingGameSharedSource = SchellingGameShared;
+}
+
+impl pallet_project_tips::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = pallet_project_tips::weights::SubstrateWeight<Runtime>;
+	type SharedStorageSource = SharedStorage;
+	type Currency = Balances;
+	type SchellingGameSharedSource = SchellingGameShared;
+}
+
 impl_tanssi_pallets_config!(Runtime);
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
@@ -676,6 +740,17 @@ construct_runtime!(
 
         RootTesting: pallet_root_testing = 100,
         AsyncBacking: pallet_async_backing::{Pallet, Storage} = 110,
+
+        TemplateModule: pallet_template = 200,
+		SortitionSumGame: pallet_sortition_sum_game = 201,
+		SchellingGameShared: pallet_schelling_game_shared = 202,
+		ProfileValidation: pallet_profile_validation = 203,
+		SharedStorage: pallet_shared_storage = 204,
+		PositiveExternality: pallet_positive_externality = 205,
+		DepartmentFunding: pallet_department_funding = 206,
+		ProjectTips: pallet_project_tips = 207,
+        RandomnessCollectiveFlip: pallet_insecure_randomness_collective_flip = 208,
+
 
     }
 );

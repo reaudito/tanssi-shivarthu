@@ -70,10 +70,9 @@ pub mod pallet {
 		pub approved_citizen_address: Vec<T::AccountId>,
 	}
 
-	#[cfg(feature = "std")]
 	impl<T: Config> Default for GenesisConfig<T> {
 		fn default() -> Self {
-			Self { approved_citizen_address: Default::default() }
+			Self { approved_citizen_address: Default::default()}
 		}
 	}
 

@@ -2,8 +2,8 @@
 
 // use frame_support::sp_std::{vec::Vec};
 //  or
-use frame_support::sp_std::prelude::*;
-use sp_api::codec::Codec;
+use sp_std::prelude::*;
+use parity_scale_codec::Codec;
 
 type ProjectId = u64;
 

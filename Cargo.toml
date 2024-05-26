@@ -5,6 +5,7 @@ members = [
 	"container-chains/runtime-templates/*",
 	"node",
 	"pallets/*",
+	"custom-pallets/*",
 	"pallets/collator-assignment/rpc/runtime-api",
 	"pallets/registrar/rpc/runtime-api",
 	"primitives/*",
@@ -69,16 +70,16 @@ pallet-xcm-core-buyer = { path = "pallets/xcm-core-buyer", default-features = fa
 ## New start
 
 ## New pallets
-pallet-template = {path = "pallets/template", default-features= false}
-pallet-support = {path = "pallets/support", default-features= false}
-pallet-spaces = {path= "pallets/spaces", default-features=false }
-pallet-sortition-sum-game = {path = "pallets/sortition-sum-game", default-features=false}
-pallet-shared-storage = {path = "pallets/shared-storage", default-features = false}
-pallet-schelling-game-shared = {path = "pallets/schelling-game-shared", default-features = false }
-pallet-profile-validation = {path = "pallets/profile-validation", default-features = false}
-pallet-project-tips = {path = "pallets/project-tips", default-features = false}
-pallet-positive-externality = { path = "pallets/positive-externality", default-features = false }
-pallet-department-funding = { path = "pallets/department-funding", default-features = false }
+pallet-template = {path = "custom-pallets/template", default-features= false}
+pallet-support = {path = "custom-pallets/support", default-features= false}
+pallet-spaces = {path= "custom-pallets/spaces", default-features=false }
+pallet-sortition-sum-game = {path = "custom-pallets/sortition-sum-game", default-features=false}
+pallet-shared-storage = {path = "custom-pallets/shared-storage", default-features = false}
+pallet-schelling-game-shared = {path = "custom-pallets/schelling-game-shared", default-features = false }
+pallet-profile-validation = {path = "custom-pallets/profile-validation", default-features = false}
+pallet-project-tips = {path = "custom-pallets/project-tips", default-features = false}
+pallet-positive-externality = { path = "custom-pallets/positive-externality", default-features = false }
+pallet-department-funding = { path = "custom-pallets/department-funding", default-features = false }
 
 ## Traits
 trait-sortition-sum-game = {path = "traits/trait-sortition-sum-game", default-features=false}
@@ -86,17 +87,17 @@ trait-shared-storage = {path= "traits/trait-shared-storage", default-features=fa
 trait-schelling-game-shared = {path = "traits/trait-schelling-game-shared", default-features=false}
 
 ## Api
-profile-validation-runtime-api = { path = "pallets/profile-validation/profile-validation-runtime-api", default-features = false}
-project-tips-runtime-api = { path = "pallets/project-tips/project-tips-runtime-api", default-features = false }
-positive-externality-runtime-api = { path = "pallets/positive-externality/positive-externality-runtime-api", default-features = false}
-department-funding-runtime-api = { path = "pallets/department-funding/department-funding-runtime-api", default-features = false}
+profile-validation-runtime-api = { path = "custom-pallets/profile-validation/profile-validation-runtime-api", default-features = false}
+project-tips-runtime-api = { path = "custom-pallets/project-tips/project-tips-runtime-api", default-features = false }
+positive-externality-runtime-api = { path = "custom-pallets/positive-externality/positive-externality-runtime-api", default-features = false}
+department-funding-runtime-api = { path = "custom-pallets/department-funding/department-funding-runtime-api", default-features = false}
 
 
 ## Rpc
-profile-validation-rpc = { path = "pallets/profile-validation/profile-validation-rpc", default-features = false}
-project-tips-rpc = { path = "pallets/project-tips/project-tips-rpc", default-features = false }
-positive-externality-rpc = { path = "pallets/positive-externality/positive-externality-rpc", default-features = false}
-department-funding-rpc = { path = "pallets/department-funding/department-funding-rpc", default-features = false}
+profile-validation-rpc = { path = "custom-pallets/profile-validation/profile-validation-rpc", default-features = false}
+project-tips-rpc = { path = "custom-pallets/project-tips/project-tips-rpc", default-features = false }
+positive-externality-rpc = { path = "custom-pallets/positive-externality/positive-externality-rpc", default-features = false}
+department-funding-rpc = { path = "custom-pallets/department-funding/department-funding-rpc", default-features = false}
 
 
 
@@ -106,6 +107,7 @@ sp-arithmetic = { git = "https://github.com/moondance-labs/polkadot-sdk", branch
 strum = { version = "0.26.2", default-features = false, features = ["derive"] }
 num-integer = {default-features = false, version= "0.1.44"}
 frame-support-test ={ git = "https://github.com/moondance-labs/polkadot-sdk", branch = "tanssi-polkadot-v1.6.0", default-features = false}
+pallet-insecure-randomness-collective-flip = { git = "https://github.com/moondance-labs/polkadot-sdk", branch = "tanssi-polkadot-v1.6.0", default-features = false}
 
 ## New end
 
