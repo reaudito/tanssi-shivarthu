@@ -31,3 +31,32 @@ pub struct Project<T: Config> {
 	pub funding_needed: BalanceOf<T>,
 	pub project_leader: T::AccountId,
 }
+
+#[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo)]
+#[scale_info(skip_type_params(T))]
+pub struct Incentives<T: Config> {
+	pub number_of_games: u32,
+	pub winner: u32,
+	pub loser: u32,
+	pub start: WhoAndWhenOf<T>,
+	pub update: WhoAndWhenOf<T>,
+}
+
+
+#[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo)]
+#[scale_info(skip_type_params(T))]
+pub struct IncentivesMetaData<T: Config> {
+    pub total_number: u32,
+	pub disincentive_times: u32, 
+    pub total_block: BlockNumberOf<T>,
+}
+
+impl<T: Config> Default for IncentivesMetaData<T> {
+    fn default() -> Self {
+        Self {
+            total_number: 20,
+            disincentive_times: 15, // its 1.5
+            total_block: 432000u64.saturated_into::<BlockNumberOf<T>>() // 30 days = (24*60*60)/6 * 30
+        }
+    }
+}

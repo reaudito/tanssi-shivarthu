@@ -44,7 +44,7 @@ use trait_schelling_game_shared::SchellingGameSharedLink;
 use trait_shared_storage::SharedStorageLink;
 use pallet_sortition_sum_game::types::SumTreeName;
 pub use types::PROJECT_ID;
-use types::{Project, TippingName, TippingValue};
+use types::{Project, TippingName, TippingValue, Incentives, IncentivesMetaData};
 
 type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
 type BalanceOf<T> = <<T as Config>::Currency as Currency<AccountIdOf<T>>>::Balance;
@@ -55,7 +55,9 @@ type ProjectId = u64;
 
 #[frame_support::pallet(dev_mode)]
 pub mod pallet {
-	use super::*;
+	use core::default;
+
+use super::*;
 	
 
 	#[pallet::pallet]
@@ -122,6 +124,21 @@ pub mod pallet {
 	#[pallet::getter(fn validation_block)]
 	pub type ValidationBlock<T: Config> =
 		StorageMap<_, Blake2_128Concat, ProjectId, BlockNumberOf<T>>;
+
+	
+	#[pallet::storage]
+	#[pallet::getter(fn incentives_count)]
+	pub type IncentiveCount<T:Config> = StorageMap<_, Blake2_128Concat, T::AccountId, Incentives<T>>;
+
+   
+    #[pallet::type_value]
+	pub fn IncentivesMetaValue<T: Config>() -> IncentivesMetaData<T> {
+		IncentivesMetaData::default()
+	}
+
+	#[pallet::storage]
+	#[pallet::getter(fn incentives_meta)]
+	pub type IncentivesMeta<T:Config> = StorageValue<_, IncentivesMetaData<T>, ValueQuery, IncentivesMetaValue<T>>;
 
 	// Pallets use events to inform users when important changes are made.
 	// https://docs.substrate.io/main-docs/build/events-errors/
