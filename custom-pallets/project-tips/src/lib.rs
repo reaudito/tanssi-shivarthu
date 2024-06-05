@@ -374,16 +374,30 @@ use super::*;
 
 		#[pallet::call_index(8)]
 		#[pallet::weight(0)]
-		pub fn get_incentives(origin: OriginFor<T>, project_id: ProjectId) -> DispatchResult {
+		pub fn add_incentive_count(
+			origin: OriginFor<T>,
+			project_id: ProjectId
+
+		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let block_number = Self::get_block_number_of_schelling_game(project_id)?;
-			let key = SumTreeName::ProjectTips { project_id, block_number: block_number.clone() };
-
-			let phase_data = Self::get_phase_data();
-			T::SchellingGameSharedSource::get_incentives_two_choice_helper_link(
-				key, phase_data, who,
-			)?;
+			// let key = SumTreeName::ProjectTips { project_id, block_number: block_number.clone() };
 			Ok(())
+
 		}
+
+		// #[pallet::call_index(8)]
+		// #[pallet::weight(0)]
+		// pub fn get_incentives(origin: OriginFor<T>, project_id: ProjectId) -> DispatchResult {
+		// 	let who = ensure_signed(origin)?;
+		// 	let block_number = Self::get_block_number_of_schelling_game(project_id)?;
+		// 	let key = SumTreeName::ProjectTips { project_id, block_number: block_number.clone() };
+
+		// 	let phase_data = Self::get_phase_data();
+		// 	T::SchellingGameSharedSource::get_incentives_two_choice_helper_link(
+		// 		key, phase_data, who,
+		// 	)?;
+		// 	Ok(())
+		// }
 	}
 }

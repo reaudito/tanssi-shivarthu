@@ -86,6 +86,18 @@ pub enum WinningDecision {
 	Draw,
 }
 
+
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Encode, Decode, MaxEncodedLen, TypeInfo)]
+#[cfg_attr(feature = "std", derive(Debug))]
+pub enum WonLost {
+	Won,
+	Lost,
+	Draw,
+}
+
+
+
+
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Encode, Decode, MaxEncodedLen, TypeInfo)]
 #[cfg_attr(feature = "std", derive(Debug))]
 pub struct ScoreCommitVote {

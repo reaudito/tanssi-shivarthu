@@ -614,6 +614,61 @@ impl<T: Config> Pallet<T> {
 		Ok(())
 	}
 
+
+	pub(super) fn get_result_of_juror(
+		key: SumTreeNameType<T>,
+		who: AccountIdOf<T>
+	) -> Result<WonLost, DispatchError> {
+		match <PeriodName<T>>::get(&key) {
+			Some(period) => {
+				ensure!(period == Period::Execution, Error::<T>::PeriodDontMatch);
+			},
+			None => Err(Error::<T>::PeriodDoesNotExists)?,
+		}
+
+		let drawn_juror = <DrawnJurors<T>>::get(&key);
+
+		let who_commit_vote = <VoteCommits<T>>::get(&key, &who);
+		match who_commit_vote {
+			Some(commit_struct) => {
+				let vote_option = commit_struct.revealed_vote;
+				match vote_option {
+					Some(vote) => {
+						let decision_count: (u64, u64) = <DecisionCount<T>>::get(&key);
+						let winning_decision = Self::get_winning_decision(decision_count);
+						if let Ok(_) = drawn_juror.binary_search_by(|(c, _)| c.cmp(&who.clone())) {
+							match winning_decision {
+								WinningDecision::WinnerYes => match vote {
+									RevealedVote::Yes => {
+										Ok(WonLost::Won)
+									},
+									RevealedVote::No => {
+										Ok(WonLost::Lost)
+									},
+								},
+								WinningDecision::WinnerNo => match vote {
+									RevealedVote::Yes => {
+										Ok(WonLost::Lost)
+									},
+									RevealedVote::No => {
+										Ok(WonLost::Won)
+									},
+								},
+								WinningDecision::Draw => {
+									Ok(WonLost::Lost)
+								},
+							}
+						} else {
+							Err(Error::<T>::StakeDoesNotExists)?
+						}
+					},
+					None => Err(Error::<T>::VoteNotRevealed)?,
+				}
+			},
+			None => Err(Error::<T>::CommitDoesNotExists)?,
+		}
+	}
+
 	pub(super) fn getting_incentives_draw(
 		key: SumTreeNameType<T>,
 		who: AccountIdOf<T>,

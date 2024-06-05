@@ -24,7 +24,7 @@ pub mod types;
 
 use crate::types::{
 	CommitVote, Period, PhaseData, RangePoint, RevealedVote, SchellingGameType, ScoreCommitVote,
-	VoteStatus, WinningDecision,
+	VoteStatus, WinningDecision, WonLost
 };
 use frame_support::pallet_prelude::*;
 use frame_system::pallet_prelude::*;
