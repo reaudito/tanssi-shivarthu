@@ -414,7 +414,7 @@ pub mod pallet {
 				RangePoint::ZeroToFive,
 			)?;
 
-			let score = T::SchellingGameSharedSource::get_mean_value_link(key.clone());
+			let score = T::SchellingGameSharedSource::get_mean_value_link(key.clone())?;
 			// println!("Score {:?}", score);
 			T::SharedStorageSource::set_positive_externality_link(user_to_calculate, score)?;
 

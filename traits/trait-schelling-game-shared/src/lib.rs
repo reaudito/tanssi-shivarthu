@@ -1,5 +1,6 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 use frame_support::dispatch::DispatchResult;
+use frame_support::pallet_prelude::DispatchError;
 use sp_std::prelude::*;
 
 pub trait SchellingGameSharedLink {
@@ -134,7 +135,7 @@ pub trait SchellingGameSharedLink {
 		range_point: Self::RangePoint,
 	) -> DispatchResult;
 
-	fn get_mean_value_link(key: Self::SumTreeName) -> i64;
+	fn get_mean_value_link(key: Self::SumTreeName) ->  Result<i64, DispatchError>;
 
 	fn get_all_incentives_two_choice_helper(
 		key: Self::SumTreeName,

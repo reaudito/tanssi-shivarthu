@@ -168,7 +168,7 @@ pub mod pallet {
 	#[pallet::storage]
 	#[pallet::getter(fn new_mean_reveal_score)]
 	pub type IncentiveMeanRevealScore<T: Config> =
-		StorageMap<_, Blake2_128Concat, SumTreeNameType<T>, i64, ValueQuery>;
+		StorageMap<_, Blake2_128Concat, SumTreeNameType<T>, i64>;
 
 	/// Decision count for two choices after reveal vote:  (count for 0, count for 1)
 	#[pallet::storage]
@@ -180,6 +180,10 @@ pub mod pallet {
 	#[pallet::getter(fn juror_incentive_distribution)]
 	pub type JurorsIncentiveDistributedAccounts<T: Config> =
 		StorageMap<_, Blake2_128Concat, SumTreeNameType<T>, Vec<T::AccountId>, ValueQuery>;
+
+	
+	// #[pallet::storage]
+	// #[pallet::getter(fn )]
 
 	// Pallets use events to inform users when important changes are made.
 	// https://docs.substrate.io/main-docs/build/events-errors/
@@ -223,6 +227,7 @@ pub mod pallet {
 		VoteNotRevealed,
 		TimeForStakingOver,
 		TimeForStakingNotOver,
+		NewMeanNotInserted,
 	}
 
 	// Dispatchable functions allows users to interact with the pallet and invoke state changes.

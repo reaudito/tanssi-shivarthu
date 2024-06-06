@@ -163,9 +163,63 @@ impl<T: Config> Pallet<T> {
 		Ok(())
 	}
 
-	pub(super) fn get_mean_value(key: SumTreeNameType<T>) -> i64 {
-		let value = <IncentiveMeanRevealScore<T>>::get(key.clone());
-		value
+
+	pub(super) fn get_score_value_schelling(
+		key: SumTreeNameType<T>,
+		who: AccountIdOf<T>,
+		range_point: RangePoint,
+	) -> Result<WonLost, DispatchError> {
+		match <PeriodName<T>>::get(&key) {
+			Some(period) => {
+				ensure!(period == Period::Execution, Error::<T>::PeriodDontMatch);
+			},
+			None => Err(Error::<T>::PeriodDoesNotExists)?,
+		}
+		let new_mean = Self::get_mean_value(key.clone())?;
+
+		let incentives_range = Self::get_incentives_range(range_point);
+        let reveal_votes = <ScoreVoteCommits<T>>::get(&key, &who);
+		match reveal_votes {
+			Some(commit_struct) => {
+				let vote_option = commit_struct.revealed_vote;
+				match vote_option {
+					Some(vote) => {
+						if vote * 1000 >= new_mean.checked_sub(incentives_range).unwrap()
+							&& vote * 1000 <= new_mean.checked_add(incentives_range).unwrap()
+						{
+							// get incentives
+							Ok(WonLost::Won)
+						} else { 
+							Ok(WonLost::Lost)
+						}
+					},
+					None => Err(Error::<T>::VoteNotRevealed)?,
+				}
+
+			}
+			None => Err(Error::<T>::CommitDoesNotExists)?,
+		}
+
+	}
+
+	pub(super) fn set_new_mean_value(key: SumTreeNameType<T>) -> DispatchResult {
+		let reveal_values = <RevealScoreValues<T>>::get(&key);
+		let sd_and_mean = Self::std_deviation_interger(&reveal_values);
+		let new_mean = Self::calculate_new_mean(&reveal_values, sd_and_mean).unwrap();
+		// println!("new mean: {:?}", new_mean);
+		<IncentiveMeanRevealScore<T>>::insert(key.clone(), new_mean);
+
+		Ok(())
+	}
+
+	pub(super) fn get_mean_value(key: SumTreeNameType<T>) -> Result<i64, DispatchError> {
+		let mean_option = <IncentiveMeanRevealScore<T>>::get(key);
+		match mean_option {
+			Some(mean) => {
+				Ok(mean)
+			},
+			None => Err(Error::<T>::NewMeanNotInserted)?,
+		}
 	}
 
 	/// Calculate the mean of integer

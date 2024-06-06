@@ -286,7 +286,7 @@ impl<T: Config> SchellingGameSharedLink for Pallet<T> {
 	}
 
 	/// Get new mean in score schelling game
-	fn get_mean_value_link(key: Self::SumTreeName) -> i64 {
+	fn get_mean_value_link(key: Self::SumTreeName) -> Result<i64, DispatchError>{
 		Self::get_mean_value(key)
 	}
 
