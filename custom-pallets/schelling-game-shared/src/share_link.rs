@@ -321,4 +321,8 @@ impl<T: Config> SchellingGameSharedLink for Pallet<T> {
     ) -> Result<JurorGameResult, DispatchError> {
         Self::get_result_of_juror_score(key, who, range_point)
     }
+
+    fn set_new_mean_value(key: Self::SumTreeName) -> DispatchResult {
+        Self::set_new_mean_value(key)
+    }
 }
