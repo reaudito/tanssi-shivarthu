@@ -38,8 +38,8 @@ pub struct Incentives<T: Config> {
     pub number_of_games: u32,
     pub winner: u32,
     pub loser: u32,
-    pub start: WhoAndWhenOf<T>,
-    pub update: WhoAndWhenOf<T>,
+    pub start: WhenDetailsOf<T>,
+    pub update: WhenDetailsOf<T>,
 }
 
 #[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo)]

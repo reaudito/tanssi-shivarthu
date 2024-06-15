@@ -32,10 +32,13 @@ use frame_support::{
     traits::{Currency, ExistenceRequirement, Get, ReservableCurrency, WithdrawReasons},
     PalletId,
 };
-use pallet_schelling_game_shared::types::{Period, PhaseData, RangePoint, SchellingGameType};
+use pallet_schelling_game_shared::types::{
+    JurorGameResult, Period, PhaseData, RangePoint, SchellingGameType,
+};
 use pallet_sortition_sum_game::types::SumTreeName;
 use pallet_support::{
-    ensure_content_is_valid, new_who_and_when, remove_from_vec, Content, WhoAndWhen, WhoAndWhenOf,
+    ensure_content_is_valid, new_when_details, new_who_and_when, remove_from_vec, Content,
+    WhenDetails, WhenDetailsOf, WhoAndWhen, WhoAndWhenOf,
 };
 use trait_schelling_game_shared::SchellingGameSharedLink;
 use trait_shared_storage::SharedStorageLink;
@@ -77,6 +80,7 @@ pub mod pallet {
             RangePoint = RangePoint,
             Period = Period,
             PhaseData = PhaseData<Self>,
+            JurorGameResult = JurorGameResult,
         >;
         type Currency: ReservableCurrency<Self::AccountId>;
     }
@@ -396,7 +400,34 @@ pub mod pallet {
         pub fn add_incentive_count(origin: OriginFor<T>, project_id: ProjectId) -> DispatchResult {
             let who = ensure_signed(origin)?;
             let block_number = Self::get_block_number_of_schelling_game(project_id)?;
-            // let key = SumTreeName::ProjectTips { project_id, block_number: block_number.clone() };
+            let key = SumTreeName::ProjectTips {
+                project_id,
+                block_number: block_number.clone(),
+            };
+            let juror_game_result =
+                T::SchellingGameSharedSource::get_result_of_juror(key, who.clone())?;
+            let incentive_count_option = <IncentiveCount<T>>::get(&who);
+            match incentive_count_option {
+                Some(incentive) => {}
+                None => {
+                    let mut winner = 0;
+                    let mut loser = 0;
+                    match juror_game_result {
+                        JurorGameResult::Won => {
+                            winner = 1;
+                        }
+                        JurorGameResult::Lost => {
+                            loser = 1;
+                        }
+                        JurorGameResult::Draw => {}
+                    };
+                    let number_of_games = 1;
+                    let new_incentives: Incentives<T> =
+                        Incentives::new(number_of_games, winner, loser);
+                    <IncentiveCount<T>>::insert(&who, new_incentives);
+                }
+            }
+
             Ok(())
         }
 

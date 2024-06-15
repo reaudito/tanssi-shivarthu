@@ -21,6 +21,18 @@ impl<T: Config> Project<T> {
     }
 }
 
+impl<T: Config> Incentives<T> {
+    pub fn new(number_of_games: u32, winner: u32, loser: u32) -> Self {
+        Incentives {
+            number_of_games: number_of_games,
+            winner: winner,
+            loser: loser,
+            start: new_when_details::<T>(),
+            update: new_when_details::<T>(),
+        }
+    }
+}
+
 impl<T: Config> Pallet<T> {
     pub(super) fn get_phase_data() -> PhaseData<T> {
         T::SchellingGameSharedSource::create_phase_data(50, 5, 3, 100, (100, 100))

@@ -38,6 +38,24 @@ where
 }
 
 #[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo)]
+pub struct WhenDetails<BlockNumber, Moment> {
+    pub block: BlockNumber,
+    pub time: Moment,
+}
+
+pub type WhenDetailsOf<T> = WhenDetails<BlockNumberFor<T>, <T as pallet_timestamp::Config>::Moment>;
+
+pub fn new_when_details<T>() -> WhenDetails<BlockNumberFor<T>, T::Moment>
+where
+    T: frame_system::Config + pallet_timestamp::Config,
+{
+    WhenDetails {
+        block: frame_system::Pallet::<T>::block_number(),
+        time: pallet_timestamp::Pallet::<T>::now(),
+    }
+}
+
+#[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo)]
 pub enum Content {
     /// No content.
     None,
