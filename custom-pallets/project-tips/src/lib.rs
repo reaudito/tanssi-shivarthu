@@ -405,10 +405,25 @@ pub mod pallet {
                 block_number: block_number.clone(),
             };
             let juror_game_result =
-                T::SchellingGameSharedSource::get_result_of_juror(key, who.clone())?;
+                T::SchellingGameSharedSource::get_result_of_juror(key.clone(), who.clone())?;
+
+            T::SchellingGameSharedSource::add_to_incentives_count(key, who.clone())?;
             let incentive_count_option = <IncentiveCount<T>>::get(&who);
             match incentive_count_option {
-                Some(incentive) => {}
+                Some(mut incentive) => {
+                    match juror_game_result {
+                        JurorGameResult::Won => {
+                            incentive.number_of_games += 1;
+                            incentive.winner += 1;
+                        }
+                        JurorGameResult::Lost => {
+                            incentive.number_of_games += 1;
+                            incentive.loser += 1;
+                        }
+    
+                        JurorGameResult::Draw => {}
+                    };
+                }
                 None => {
                     let mut winner = 0;
                     let mut loser = 0;

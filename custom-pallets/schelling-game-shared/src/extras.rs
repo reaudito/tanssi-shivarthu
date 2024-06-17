@@ -670,6 +670,21 @@ impl<T: Config> Pallet<T> {
         }
     }
 
+    pub(super) fn add_to_incentives_count(
+        key: SumTreeNameType<T>,
+        who: AccountIdOf<T>,
+    ) -> DispatchResult {
+        let mut juror_got_incentives = <IncentiveAddedToCount<T>>::get(&key);
+        match juror_got_incentives.binary_search(&who) {
+            Ok(_) => Err(Error::<T>::AlreadyGotIncentives)?,
+            Err(index) => {
+                juror_got_incentives.insert(index, who.clone());
+                <JurorsIncentiveDistributedAccounts<T>>::insert(&key, juror_got_incentives);
+            }
+        }
+        Ok(())
+    }
+
     pub(super) fn getting_incentives_draw(
         key: SumTreeNameType<T>,
         who: AccountIdOf<T>,

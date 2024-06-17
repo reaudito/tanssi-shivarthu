@@ -325,4 +325,8 @@ impl<T: Config> SchellingGameSharedLink for Pallet<T> {
     fn set_new_mean_value(key: Self::SumTreeName) -> DispatchResult {
         Self::set_new_mean_value(key)
     }
+
+    fn add_to_incentives_count(key: Self::SumTreeName, who: Self::AccountId) -> DispatchResult {
+        Self::add_to_incentives_count(key, who)
+    }
 }

@@ -158,4 +158,6 @@ pub trait SchellingGameSharedLink {
     ) -> Result<Self::JurorGameResult, DispatchError>;
 
     fn set_new_mean_value(key: Self::SumTreeName) -> DispatchResult;
+
+    fn add_to_incentives_count(key: Self::SumTreeName, who: Self::AccountId) -> DispatchResult;
 }
