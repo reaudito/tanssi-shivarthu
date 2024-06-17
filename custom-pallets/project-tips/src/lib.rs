@@ -420,7 +420,7 @@ pub mod pallet {
                             incentive.number_of_games += 1;
                             incentive.loser += 1;
                         }
-    
+
                         JurorGameResult::Draw => {}
                     };
                 }

@@ -183,8 +183,8 @@ pub mod pallet {
 
     #[pallet::storage]
     #[pallet::getter(fn incentive_added_to_count)]
-    pub type IncentiveAddedToCount<T:Config> = StorageMap<_, Blake2_128Concat, SumTreeNameType<T>, Vec<T::AccountId>, ValueQuery>;
-
+    pub type IncentiveAddedToCount<T: Config> =
+        StorageMap<_, Blake2_128Concat, SumTreeNameType<T>, Vec<T::AccountId>, ValueQuery>;
 
     // #[pallet::storage]
     // #[pallet::getter(fn )]
