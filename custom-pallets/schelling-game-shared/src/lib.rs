@@ -228,6 +228,7 @@ pub mod pallet {
         CommitDoesNotMatch,
         CommitDoesNotExists,
         AlreadyGotIncentives,
+        AlreadyIncentivesAdded,
         VoteNotRevealed,
         TimeForStakingOver,
         TimeForStakingNotOver,

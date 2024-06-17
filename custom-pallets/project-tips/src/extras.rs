@@ -28,7 +28,6 @@ impl<T: Config> Incentives<T> {
             winner: winner,
             loser: loser,
             start: new_when_details::<T>(),
-            update: new_when_details::<T>(),
         }
     }
 }

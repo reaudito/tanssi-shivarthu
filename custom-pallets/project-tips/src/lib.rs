@@ -423,6 +423,9 @@ pub mod pallet {
 
                         JurorGameResult::Draw => {}
                     };
+                    <IncentiveCount<T>>::mutate(&who, |incentive_option| {
+                        *incentive_option = Some(incentive);
+                    });
                 }
                 None => {
                     let mut winner = 0;
@@ -445,6 +448,8 @@ pub mod pallet {
 
             Ok(())
         }
+
+        // Provide incentives
 
         // #[pallet::call_index(8)]
         // #[pallet::weight(0)]

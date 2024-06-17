@@ -676,10 +676,10 @@ impl<T: Config> Pallet<T> {
     ) -> DispatchResult {
         let mut juror_got_incentives = <IncentiveAddedToCount<T>>::get(&key);
         match juror_got_incentives.binary_search(&who) {
-            Ok(_) => Err(Error::<T>::AlreadyGotIncentives)?,
+            Ok(_) => Err(Error::<T>::AlreadyIncentivesAdded)?,
             Err(index) => {
                 juror_got_incentives.insert(index, who.clone());
-                <JurorsIncentiveDistributedAccounts<T>>::insert(&key, juror_got_incentives);
+                <IncentiveAddedToCount<T>>::insert(&key, juror_got_incentives);
             }
         }
         Ok(())

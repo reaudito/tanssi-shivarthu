@@ -39,7 +39,6 @@ pub struct Incentives<T: Config> {
     pub winner: u32,
     pub loser: u32,
     pub start: WhenDetailsOf<T>,
-    pub update: WhenDetailsOf<T>,
 }
 
 #[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo)]
