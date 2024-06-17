@@ -404,7 +404,7 @@ pub mod pallet {
                 project_id,
                 block_number: block_number.clone(),
             };
-            let juror_game_result =
+            let (juror_game_result, stake) =
                 T::SchellingGameSharedSource::get_result_of_juror(key.clone(), who.clone())?;
 
             T::SchellingGameSharedSource::add_to_incentives_count(key, who.clone())?;
@@ -415,13 +415,18 @@ pub mod pallet {
                         JurorGameResult::Won => {
                             incentive.number_of_games += 1;
                             incentive.winner += 1;
+                            incentive.total_stake += stake;
                         }
                         JurorGameResult::Lost => {
                             incentive.number_of_games += 1;
                             incentive.loser += 1;
+                            incentive.total_stake += stake;
                         }
 
-                        JurorGameResult::Draw => {}
+                        JurorGameResult::Draw => {
+                            incentive.number_of_games += 1;
+                            incentive.total_stake += stake;
+                        }
                     };
                     <IncentiveCount<T>>::mutate(&who, |incentive_option| {
                         *incentive_option = Some(incentive);
@@ -441,7 +446,7 @@ pub mod pallet {
                     };
                     let number_of_games = 1;
                     let new_incentives: Incentives<T> =
-                        Incentives::new(number_of_games, winner, loser);
+                        Incentives::new(number_of_games, winner, loser, stake);
                     <IncentiveCount<T>>::insert(&who, new_incentives);
                 }
             }

@@ -516,6 +516,7 @@ fn schelling_game_incentives_test() {
             number_of_games: 1,
             winner: 1,
             loser: 0,
+            total_stake: 14 * 100,
             start: WhenDetails {
                 block: 201,
                 time: 0,
@@ -541,6 +542,7 @@ fn schelling_game_incentives_test() {
             number_of_games: 1,
             winner: 0,
             loser: 1,
+            total_stake: 15 * 100,
             start: WhenDetails {
                 block: 201,
                 time: 0,

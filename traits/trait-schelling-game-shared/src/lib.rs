@@ -150,7 +150,7 @@ pub trait SchellingGameSharedLink {
     fn get_result_of_juror(
         key: Self::SumTreeName,
         who: Self::AccountId,
-    ) -> Result<Self::JurorGameResult, DispatchError>;
+    ) -> Result<(Self::JurorGameResult, u64), DispatchError>;
     fn get_result_of_juror_score(
         key: Self::SumTreeName,
         who: Self::AccountId,

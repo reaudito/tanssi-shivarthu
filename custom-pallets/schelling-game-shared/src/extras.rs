@@ -629,7 +629,7 @@ impl<T: Config> Pallet<T> {
     pub(super) fn get_result_of_juror(
         key: SumTreeNameType<T>,
         who: AccountIdOf<T>,
-    ) -> Result<JurorGameResult, DispatchError> {
+    ) -> Result<(JurorGameResult, u64), DispatchError> {
         match <PeriodName<T>>::get(&key) {
             Some(period) => {
                 ensure!(period == Period::Execution, Error::<T>::PeriodDontMatch);
@@ -647,17 +647,19 @@ impl<T: Config> Pallet<T> {
                     Some(vote) => {
                         let decision_count: (u64, u64) = <DecisionCount<T>>::get(&key);
                         let winning_decision = Self::get_winning_decision(decision_count);
-                        if let Ok(_) = drawn_juror.binary_search_by(|(c, _)| c.cmp(&who.clone())) {
+                        if let Ok(i) = drawn_juror.binary_search_by(|(c, _)| c.cmp(&who.clone())) {
+                            let stake = drawn_juror[i].1;
+
                             match winning_decision {
                                 WinningDecision::WinnerYes => match vote {
-                                    RevealedVote::Yes => Ok(JurorGameResult::Won),
-                                    RevealedVote::No => Ok(JurorGameResult::Lost),
+                                    RevealedVote::Yes => Ok((JurorGameResult::Won, stake)),
+                                    RevealedVote::No => Ok((JurorGameResult::Lost, stake)),
                                 },
                                 WinningDecision::WinnerNo => match vote {
-                                    RevealedVote::Yes => Ok(JurorGameResult::Lost),
-                                    RevealedVote::No => Ok(JurorGameResult::Won),
+                                    RevealedVote::Yes => Ok((JurorGameResult::Lost, stake)),
+                                    RevealedVote::No => Ok((JurorGameResult::Won, stake)),
                                 },
-                                WinningDecision::Draw => Ok(JurorGameResult::Lost),
+                                WinningDecision::Draw => Ok((JurorGameResult::Draw, stake)),
                             }
                         } else {
                             Err(Error::<T>::StakeDoesNotExists)?

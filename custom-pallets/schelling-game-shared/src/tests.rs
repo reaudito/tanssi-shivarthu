@@ -466,16 +466,21 @@ fn challenger_win_value_test() {
         ));
         let period = TemplateModule::get_period(key.clone());
         assert_eq!(Some(Period::Execution), period);
-        let result = TemplateModule::get_result_of_juror(key.clone(), 4);
-        assert_eq!(result.unwrap(), JurorGameResult::Won);
-        let result = TemplateModule::get_result_of_juror(key.clone(), 7);
-        assert_eq!(result.unwrap(), JurorGameResult::Won);
-        let result = TemplateModule::get_result_of_juror(key.clone(), 13);
-        assert_eq!(result.unwrap(), JurorGameResult::Won);
-        let result = TemplateModule::get_result_of_juror(key.clone(), 14);
-        assert_eq!(result.unwrap(), JurorGameResult::Won);
-        let result = TemplateModule::get_result_of_juror(key.clone(), 15);
-        assert_eq!(result.unwrap(), JurorGameResult::Lost);
+        let result_stake = TemplateModule::get_result_of_juror(key.clone(), 4);
+        let (result, _) = result_stake.unwrap();
+        assert_eq!(result, JurorGameResult::Won);
+        let result_stake = TemplateModule::get_result_of_juror(key.clone(), 7);
+        let (result, _) = result_stake.unwrap();
+        assert_eq!(result, JurorGameResult::Won);
+        let result_stake = TemplateModule::get_result_of_juror(key.clone(), 13);
+        let (result, _) = result_stake.unwrap();
+        assert_eq!(result, JurorGameResult::Won);
+        let result_stake = TemplateModule::get_result_of_juror(key.clone(), 14);
+        let (result, _) = result_stake.unwrap();
+        assert_eq!(result, JurorGameResult::Won);
+        let result_stake = TemplateModule::get_result_of_juror(key.clone(), 15);
+        let (result, _) = result_stake.unwrap();
+        assert_eq!(result, JurorGameResult::Lost);
     });
 }
 

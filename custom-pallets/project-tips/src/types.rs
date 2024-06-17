@@ -38,6 +38,7 @@ pub struct Incentives<T: Config> {
     pub number_of_games: u32,
     pub winner: u32,
     pub loser: u32,
+    pub total_stake: u64,
     pub start: WhenDetailsOf<T>,
 }
 

@@ -310,7 +310,7 @@ impl<T: Config> SchellingGameSharedLink for Pallet<T> {
     fn get_result_of_juror(
         key: Self::SumTreeName,
         who: Self::AccountId,
-    ) -> Result<JurorGameResult, DispatchError> {
+    ) -> Result<(JurorGameResult, u64), DispatchError> {
         Self::get_result_of_juror(key, who)
     }
 
