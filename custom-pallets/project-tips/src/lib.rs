@@ -456,6 +456,32 @@ pub mod pallet {
 
         // Provide incentives
 
+        #[pallet::call_index(9)]
+        #[pallet::weight(0)]
+        pub fn get_incentives(origin: OriginFor<T>) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+            let incentive_meta = <IncentivesMeta<T>>::get();
+            let total_games_allowed = incentive_meta.total_number;
+            let incentive_count_option = <IncentiveCount<T>>::get(&who);
+            match incentive_count_option {
+                Some(incentive) => {
+                    let total_number_games = incentive.number_of_games;
+                    if total_number_games >= total_games_allowed {
+                        let new_incentives: Incentives<T> = Incentives::new(0, 0, 0, 0);
+                        <IncentiveCount<T>>::mutate(&who, |incentive_option| {
+                            *incentive_option = Some(new_incentives);
+                        });
+
+                        // Provide the incentives
+                    } else {
+                        // Error
+                    }
+                }
+                None => {}
+            }
+            Ok(())
+        }
+
         // #[pallet::call_index(8)]
         // #[pallet::weight(0)]
         // pub fn get_incentives(origin: OriginFor<T>, project_id: ProjectId) -> DispatchResult {
