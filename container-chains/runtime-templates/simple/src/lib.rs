@@ -691,6 +691,7 @@ impl pallet_project_tips::Config for Runtime {
     type WeightInfo = pallet_project_tips::weights::SubstrateWeight<Runtime>;
     type SharedStorageSource = SharedStorage;
     type Currency = Balances;
+    type Reward = ();
     type SchellingGameSharedSource = SchellingGameShared;
 }
 

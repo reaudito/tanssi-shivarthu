@@ -29,7 +29,9 @@ use frame_system::pallet_prelude::*;
 use sp_std::prelude::*;
 
 use frame_support::{
-    traits::{Currency, ExistenceRequirement, Get, ReservableCurrency, WithdrawReasons},
+    traits::{
+        Currency, ExistenceRequirement, Get, OnUnbalanced, ReservableCurrency, WithdrawReasons,
+    },
     PalletId,
 };
 use pallet_schelling_game_shared::types::{
@@ -47,6 +49,9 @@ use types::{Incentives, IncentivesMetaData, Project, TippingName, TippingValue};
 
 type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
 type BalanceOf<T> = <<T as Config>::Currency as Currency<AccountIdOf<T>>>::Balance;
+type PositiveImbalanceOf<T> = <<T as Config>::Currency as Currency<
+    <T as frame_system::Config>::AccountId,
+>>::PositiveImbalance;
 pub type BlockNumberOf<T> = BlockNumberFor<T>;
 pub type SumTreeNameType<T> = SumTreeName<AccountIdOf<T>, BlockNumberOf<T>>;
 type DepartmentId = u64;
@@ -83,6 +88,9 @@ pub mod pallet {
             JurorGameResult = JurorGameResult,
         >;
         type Currency: ReservableCurrency<Self::AccountId>;
+
+        /// Handler for the unbalanced increment when rewarding (minting rewards)
+        type Reward: OnUnbalanced<PositiveImbalanceOf<Self>>;
     }
 
     // The pallet's runtime storage items.
@@ -472,6 +480,41 @@ pub mod pallet {
                             *incentive_option = Some(new_incentives);
                         });
 
+                        let total_win = incentive.winner;
+                        let total_lost = incentive.loser;
+
+                        // Define multipliers
+                        let win_multiplier = 10 * 100;
+                        let lost_multiplier = incentive_meta.disincentive_times * 100;
+
+                        // Calculate total_win_incentives and total_lost_incentives
+                        let total_win_incentives = total_win.checked_mul(win_multiplier);
+                        let total_lost_incentives = total_lost.checked_mul(lost_multiplier);
+
+                        // Calculate total_incentives, handling overflow or negative errors
+                        let total_incentives = match (total_win_incentives, total_lost_incentives) {
+                            (Some(win), Some(lost)) => win.checked_sub(lost).unwrap_or(0),
+                            _ => 0, // If multiplication overflowed, set total_incentives to 0
+                        };
+
+                        let mut stake = incentive.total_stake;
+                        // Deduct 1% of the stake if total_lost > total_win
+                        if total_lost > total_win {
+                            let stake_deduction = stake / 100; // 1% of the stake
+                            stake = stake.checked_sub(stake_deduction).unwrap_or(stake);
+                            // Safe subtraction
+                            // println!("Stake deducted by 1%: {}", stake);
+                        }
+
+                        let total_fund = stake.checked_add(total_incentives).unwrap_or(0);
+
+                        let balance = Self::u64_to_balance_saturated(total_fund);
+
+                        let r =
+                            <T as pallet::Config>::Currency::deposit_into_existing(&who, balance)
+                                .ok()
+                                .unwrap();
+                        <T as pallet::Config>::Reward::on_unbalanced(r);
                         // Provide the incentives
                     } else {
                         // Error

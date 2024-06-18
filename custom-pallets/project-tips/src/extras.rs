@@ -22,7 +22,7 @@ impl<T: Config> Project<T> {
 }
 
 impl<T: Config> Incentives<T> {
-    pub fn new(number_of_games: u32, winner: u32, loser: u32, stake: u64) -> Self {
+    pub fn new(number_of_games: u64, winner: u64, loser: u64, stake: u64) -> Self {
         Incentives {
             number_of_games: number_of_games,
             winner: winner,

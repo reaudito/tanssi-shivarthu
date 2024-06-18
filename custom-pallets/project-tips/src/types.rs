@@ -35,9 +35,9 @@ pub struct Project<T: Config> {
 #[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo)]
 #[scale_info(skip_type_params(T))]
 pub struct Incentives<T: Config> {
-    pub number_of_games: u32,
-    pub winner: u32,
-    pub loser: u32,
+    pub number_of_games: u64,
+    pub winner: u64,
+    pub loser: u64,
     pub total_stake: u64,
     pub start: WhenDetailsOf<T>,
 }
@@ -45,8 +45,8 @@ pub struct Incentives<T: Config> {
 #[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo)]
 #[scale_info(skip_type_params(T))]
 pub struct IncentivesMetaData<T: Config> {
-    pub total_number: u32,
-    pub disincentive_times: u32,
+    pub total_number: u64,
+    pub disincentive_times: u64,
     pub total_block: BlockNumberOf<T>,
 }
 
