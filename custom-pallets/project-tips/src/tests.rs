@@ -555,7 +555,7 @@ fn schelling_game_incentives_test() {
 
 // Play two schelling game to check incentives are updated
 
-fn full_schelling_game_func(who_ask_tipper: u64) {
+fn full_schelling_game_func(who_ask_tipper: u64, start_block_number: u64) {
     let tipping_name = TippingName::SmallTipper;
     let tipping_value = ProjectTips::value_of_tipping_name(tipping_name);
     let max_tipping_value = tipping_value.max_tipping_value;
@@ -591,8 +591,6 @@ fn full_schelling_game_func(who_ask_tipper: u64) {
 
     let phase_data = ProjectTips::get_phase_data();
 
-    let balance = Balances::free_balance(29);
-    assert_eq!(300000, balance);
     for j in 4..30 {
         assert_ok!(ProjectTips::apply_jurors(
             RuntimeOrigin::signed(j),
@@ -611,7 +609,7 @@ fn full_schelling_game_func(who_ask_tipper: u64) {
         <pallet_schelling_game_shared::Error<Test>>::StakingPeriodNotOver
     );
 
-    System::set_block_number(1 + phase_data.staking_length);
+    System::set_block_number(start_block_number + phase_data.staking_length);
 
     assert_ok!(ProjectTips::pass_period(
         RuntimeOrigin::signed(5),
@@ -625,8 +623,8 @@ fn full_schelling_game_func(who_ask_tipper: u64) {
     ));
 
     let key = SumTreeName::ProjectTips {
-        project_id: 1,
-        block_number: 1,
+        project_id: project_id,
+        block_number: start_block_number,
     };
 
     let draws_in_round = SchellingGameShared::draws_in_round(key.clone());
@@ -647,11 +645,7 @@ fn full_schelling_game_func(who_ask_tipper: u64) {
 
     assert_eq!(Some(Period::Commit), period);
 
-    let balance: u64 = Balances::free_balance(5);
-    assert_eq!(300000 - 5 * 100, balance);
     assert_ok!(ProjectTips::unstaking(RuntimeOrigin::signed(5), project_id));
-    let balance = Balances::free_balance(5);
-    assert_eq!(300000, balance);
 
     let hash = sp_io::hashing::keccak_256("1salt".as_bytes());
     assert_noop!(
@@ -706,7 +700,10 @@ fn full_schelling_game_func(who_ask_tipper: u64) {
         <pallet_schelling_game_shared::Error<Test>>::CommitPeriodNotOver
     );
     System::set_block_number(
-        phase_data.evidence_length + 1 + phase_data.staking_length + phase_data.commit_length,
+        phase_data.evidence_length
+            + start_block_number
+            + phase_data.staking_length
+            + phase_data.commit_length,
     );
     assert_ok!(ProjectTips::pass_period(
         RuntimeOrigin::signed(5),
@@ -757,7 +754,7 @@ fn full_schelling_game_func(who_ask_tipper: u64) {
     );
     System::set_block_number(
         phase_data.evidence_length
-            + 1
+            + start_block_number
             + phase_data.staking_length
             + phase_data.commit_length
             + phase_data.vote_length,
@@ -771,12 +768,55 @@ fn full_schelling_game_func(who_ask_tipper: u64) {
         ProjectTips::add_incentive_count(RuntimeOrigin::signed(13), project_id),
         <pallet_schelling_game_shared::Error<Test>>::VoteNotRevealed
     );
+    assert_ok!(ProjectTips::add_incentive_count(
+        RuntimeOrigin::signed(14),
+        project_id
+    ));
+    assert_ok!(ProjectTips::add_incentive_count(
+        RuntimeOrigin::signed(15),
+        project_id
+    ));
 }
 
 #[test]
 fn schelling_game_incentives_get_test() {
     new_test_ext().execute_with(|| {
         System::set_block_number(1);
-        full_schelling_game_func(2);
+        full_schelling_game_func(2, 1);
+        System::set_block_number(1000);
+        full_schelling_game_func(3, 1000);
+
+        let incentive_count = ProjectTips::incentives_count(14).unwrap();
+
+        let incentive_count_eq: Incentives<Test> = Incentives {
+            number_of_games: 2,
+            winner: 2,
+            loser: 0,
+            total_stake: 14 * 100 + 14 * 100,
+            start: WhenDetails {
+                block: 201,
+                time: 0,
+            },
+        };
+
+        assert_eq!(incentive_count, incentive_count_eq);
+        // println!("{:?}", incentive_count);
+
+        let incentive_count = ProjectTips::incentives_count(15).unwrap();
+
+        // println!("{:?}", incentive_count);
+
+        let incentive_count_eq: Incentives<Test> = Incentives {
+            number_of_games: 2,
+            winner: 0,
+            loser: 2,
+            total_stake: 15 * 100 + 15 * 100,
+            start: WhenDetails {
+                block: 201,
+                time: 0,
+            },
+        };
+
+        assert_eq!(incentive_count, incentive_count_eq);
     })
 }
