@@ -554,3 +554,229 @@ fn schelling_game_incentives_test() {
 }
 
 // Play two schelling game to check incentives are updated
+
+fn full_schelling_game_func(who_ask_tipper: u64) {
+    let tipping_name = TippingName::SmallTipper;
+    let tipping_value = ProjectTips::value_of_tipping_name(tipping_name);
+    let max_tipping_value = tipping_value.max_tipping_value;
+    let stake_required = tipping_value.stake_required;
+    let funding_needed = max_tipping_value - 100;
+    let content: Content = Content::IPFS(
+        "bafkreiaiq24be2iioasr6ftyaum3icmj7amtjkom2jeokov5k5ojwzhvqy"
+            .as_bytes()
+            .to_vec(),
+    );
+    assert_ok!(ProjectTips::create_project(
+        RuntimeOrigin::signed(who_ask_tipper),
+        2,
+        content,
+        tipping_name,
+        funding_needed
+    ));
+
+    let project_ids = ProjectTips::get_projects_from_accounts(who_ask_tipper);
+    let project_id = project_ids.last().unwrap();
+    let project_id = *project_id;
+
+    let balance = Balances::free_balance(who_ask_tipper);
+
+    assert_ok!(ProjectTips::apply_staking_period(
+        RuntimeOrigin::signed(who_ask_tipper),
+        project_id
+    ));
+
+    let after_balance = Balances::free_balance(who_ask_tipper);
+
+    assert_eq!(after_balance, balance - stake_required);
+
+    let phase_data = ProjectTips::get_phase_data();
+
+    let balance = Balances::free_balance(29);
+    assert_eq!(300000, balance);
+    for j in 4..30 {
+        assert_ok!(ProjectTips::apply_jurors(
+            RuntimeOrigin::signed(j),
+            project_id,
+            j * 100
+        ));
+    }
+
+    assert_noop!(
+        ProjectTips::draw_jurors(RuntimeOrigin::signed(5), project_id, 5),
+        <pallet_schelling_game_shared::Error<Test>>::PeriodDontMatch
+    );
+
+    assert_noop!(
+        ProjectTips::pass_period(RuntimeOrigin::signed(5), project_id),
+        <pallet_schelling_game_shared::Error<Test>>::StakingPeriodNotOver
+    );
+
+    System::set_block_number(1 + phase_data.staking_length);
+
+    assert_ok!(ProjectTips::pass_period(
+        RuntimeOrigin::signed(5),
+        project_id
+    ));
+
+    assert_ok!(ProjectTips::draw_jurors(
+        RuntimeOrigin::signed(5),
+        project_id,
+        5
+    ));
+
+    let key = SumTreeName::ProjectTips {
+        project_id: 1,
+        block_number: 1,
+    };
+
+    let draws_in_round = SchellingGameShared::draws_in_round(key.clone());
+    assert_eq!(5, draws_in_round);
+
+    let drawn_jurors = SchellingGameShared::drawn_jurors(key.clone());
+    assert_eq!(
+        vec![(4, 400), (7, 700), (13, 1300), (14, 1400), (15, 1500)],
+        drawn_jurors
+    );
+
+    assert_ok!(ProjectTips::pass_period(
+        RuntimeOrigin::signed(5),
+        project_id
+    ));
+
+    let period = SchellingGameShared::get_period(key.clone());
+
+    assert_eq!(Some(Period::Commit), period);
+
+    let balance: u64 = Balances::free_balance(5);
+    assert_eq!(300000 - 5 * 100, balance);
+    assert_ok!(ProjectTips::unstaking(RuntimeOrigin::signed(5), project_id));
+    let balance = Balances::free_balance(5);
+    assert_eq!(300000, balance);
+
+    let hash = sp_io::hashing::keccak_256("1salt".as_bytes());
+    assert_noop!(
+        ProjectTips::commit_vote(RuntimeOrigin::signed(6), project_id, hash),
+        <pallet_schelling_game_shared::Error<Test>>::JurorDoesNotExists
+    );
+    let hash = sp_io::hashing::keccak_256("1salt".as_bytes());
+    assert_ok!(ProjectTips::commit_vote(
+        RuntimeOrigin::signed(4),
+        project_id,
+        hash
+    ));
+
+    // You can replace vote within the commit period.
+    let hash = sp_io::hashing::keccak_256("1salt2".as_bytes());
+    assert_ok!(ProjectTips::commit_vote(
+        RuntimeOrigin::signed(4),
+        project_id,
+        hash
+    ));
+
+    let hash = sp_io::hashing::keccak_256("1salt3".as_bytes());
+    assert_ok!(ProjectTips::commit_vote(
+        RuntimeOrigin::signed(7),
+        project_id,
+        hash
+    ));
+
+    let hash = sp_io::hashing::keccak_256("1salt4".as_bytes());
+    assert_ok!(ProjectTips::commit_vote(
+        RuntimeOrigin::signed(13),
+        project_id,
+        hash
+    ));
+
+    let hash = sp_io::hashing::keccak_256("1salt5".as_bytes());
+    assert_ok!(ProjectTips::commit_vote(
+        RuntimeOrigin::signed(14),
+        project_id,
+        hash
+    ));
+
+    let hash = sp_io::hashing::keccak_256("0salt6".as_bytes());
+    assert_ok!(ProjectTips::commit_vote(
+        RuntimeOrigin::signed(15),
+        project_id,
+        hash
+    ));
+
+    assert_noop!(
+        ProjectTips::pass_period(RuntimeOrigin::signed(5), project_id),
+        <pallet_schelling_game_shared::Error<Test>>::CommitPeriodNotOver
+    );
+    System::set_block_number(
+        phase_data.evidence_length + 1 + phase_data.staking_length + phase_data.commit_length,
+    );
+    assert_ok!(ProjectTips::pass_period(
+        RuntimeOrigin::signed(5),
+        project_id
+    ));
+
+    assert_noop!(
+        ProjectTips::reveal_vote(
+            RuntimeOrigin::signed(4),
+            project_id,
+            2,
+            "salt2".as_bytes().to_vec()
+        ),
+        <pallet_schelling_game_shared::Error<Test>>::CommitDoesNotMatch
+    );
+
+    assert_ok!(ProjectTips::reveal_vote(
+        RuntimeOrigin::signed(4),
+        project_id,
+        1,
+        "salt2".as_bytes().to_vec()
+    ));
+
+    assert_ok!(ProjectTips::reveal_vote(
+        RuntimeOrigin::signed(7),
+        project_id,
+        1,
+        "salt3".as_bytes().to_vec()
+    ));
+
+    assert_ok!(ProjectTips::reveal_vote(
+        RuntimeOrigin::signed(14),
+        project_id,
+        1,
+        "salt5".as_bytes().to_vec()
+    ));
+
+    assert_ok!(ProjectTips::reveal_vote(
+        RuntimeOrigin::signed(15),
+        project_id,
+        0,
+        "salt6".as_bytes().to_vec()
+    ));
+
+    assert_noop!(
+        ProjectTips::pass_period(RuntimeOrigin::signed(5), project_id),
+        <pallet_schelling_game_shared::Error<Test>>::VotePeriodNotOver
+    );
+    System::set_block_number(
+        phase_data.evidence_length
+            + 1
+            + phase_data.staking_length
+            + phase_data.commit_length
+            + phase_data.vote_length,
+    );
+    assert_ok!(ProjectTips::pass_period(
+        RuntimeOrigin::signed(5),
+        project_id
+    ));
+
+    assert_noop!(
+        ProjectTips::add_incentive_count(RuntimeOrigin::signed(13), project_id),
+        <pallet_schelling_game_shared::Error<Test>>::VoteNotRevealed
+    );
+}
+
+#[test]
+fn schelling_game_incentives_get_test() {
+    new_test_ext().execute_with(|| {
+        System::set_block_number(1);
+        full_schelling_game_func(2);
+    })
+}

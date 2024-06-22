@@ -120,6 +120,11 @@ pub mod pallet {
     #[pallet::getter(fn get_project)]
     pub type Projects<T: Config> = StorageMap<_, Blake2_128Concat, ProjectId, Project<T>>;
 
+    #[pallet::storage]
+    #[pallet::getter(fn get_projects_from_accounts)]
+    pub type AccountProjects<T: Config> =
+        StorageMap<_, Blake2_128Concat, T::AccountId, Vec<ProjectId>, ValueQuery>;
+
     // #[pallet::storage]
     // #[pallet::getter(fn department_stake)]
     // pub type DepartmentStakeBalance<T: Config> =
@@ -218,6 +223,13 @@ pub mod pallet {
             Projects::insert(new_project_id, new_project);
             NextProjectId::<T>::mutate(|n| {
                 *n += 1;
+            });
+
+            AccountProjects::<T>::mutate(&who, |projects| {
+                let idx = projects
+                    .binary_search(&new_project_id)
+                    .unwrap_or_else(|x| x);
+                projects.insert(idx, new_project_id);
             });
 
             Self::deposit_event(Event::ProjectCreated {
