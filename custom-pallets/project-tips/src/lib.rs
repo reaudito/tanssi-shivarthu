@@ -188,6 +188,8 @@ pub mod pallet {
         ProjectCreatorDontMatch,
         ProjectIdStakingPeriodAlreadySet,
         BlockNumberProjectIdNotExists,
+        NotReachedMinimumDecision,
+        NoIncentiveCount,
     }
 
     // Check deparment exists, it will done using loose coupling
@@ -529,10 +531,10 @@ pub mod pallet {
                         <T as pallet::Config>::Reward::on_unbalanced(r);
                         // Provide the incentives
                     } else {
-                        // Error
+                        Err(Error::<T>::NotReachedMinimumDecision)?
                     }
                 }
-                None => {}
+                None => Err(Error::<T>::NoIncentiveCount)?,
             }
             Ok(())
         }
