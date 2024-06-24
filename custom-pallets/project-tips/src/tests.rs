@@ -185,7 +185,7 @@ fn schelling_game_test() {
         let phase_data = ProjectTips::get_phase_data();
 
         let balance = Balances::free_balance(29);
-        assert_eq!(300000, balance);
+        assert_eq!(3000000, balance);
         for j in 4..30 {
             assert_ok!(ProjectTips::apply_jurors(
                 RuntimeOrigin::signed(j),
@@ -195,7 +195,7 @@ fn schelling_game_test() {
         }
 
         let balance = Balances::free_balance(29);
-        assert_eq!(300000 - 29 * 100, balance);
+        assert_eq!(3000000 - 29 * 100, balance);
 
         assert_noop!(
             ProjectTips::draw_jurors(RuntimeOrigin::signed(5), 1, 5),
@@ -234,10 +234,10 @@ fn schelling_game_test() {
         assert_eq!(Some(Period::Commit), period);
 
         let balance: u64 = Balances::free_balance(5);
-        assert_eq!(300000 - 5 * 100, balance);
+        assert_eq!(3000000 - 5 * 100, balance);
         assert_ok!(ProjectTips::unstaking(RuntimeOrigin::signed(5), 1));
         let balance = Balances::free_balance(5);
-        assert_eq!(300000, balance);
+        assert_eq!(3000000, balance);
 
         let hash = sp_io::hashing::keccak_256("1salt".as_bytes());
         assert_noop!(
@@ -323,7 +323,7 @@ fn schelling_game_test() {
         // 	<pallet_schelling_game_shared::Error<Test>>::VoteNotRevealed
         // );
         // let balance: u64 = Balances::free_balance(14);
-        // assert_eq!(300000 - 14 * 100, balance);
+        // assert_eq!(3000000 - 14 * 100, balance);
         // assert_ok!(ProjectTips::get_incentives(RuntimeOrigin::signed(14), 1));
         // let balance: u64 = Balances::free_balance(14);
         // assert_eq!(300025, balance);
@@ -366,7 +366,7 @@ fn schelling_game_incentives_test() {
         let phase_data = ProjectTips::get_phase_data();
 
         let balance = Balances::free_balance(29);
-        assert_eq!(300000, balance);
+        assert_eq!(3000000, balance);
         for j in 4..30 {
             assert_ok!(ProjectTips::apply_jurors(
                 RuntimeOrigin::signed(j),
@@ -376,7 +376,7 @@ fn schelling_game_incentives_test() {
         }
 
         let balance = Balances::free_balance(29);
-        assert_eq!(300000 - 29 * 100, balance);
+        assert_eq!(3000000 - 29 * 100, balance);
 
         assert_noop!(
             ProjectTips::draw_jurors(RuntimeOrigin::signed(5), 1, 5),
@@ -415,10 +415,10 @@ fn schelling_game_incentives_test() {
         assert_eq!(Some(Period::Commit), period);
 
         let balance: u64 = Balances::free_balance(5);
-        assert_eq!(300000 - 5 * 100, balance);
+        assert_eq!(3000000 - 5 * 100, balance);
         assert_ok!(ProjectTips::unstaking(RuntimeOrigin::signed(5), 1));
         let balance = Balances::free_balance(5);
-        assert_eq!(300000, balance);
+        assert_eq!(3000000, balance);
 
         let hash = sp_io::hashing::keccak_256("1salt".as_bytes());
         assert_noop!(
@@ -1052,13 +1052,13 @@ fn schelling_game_incentives_get_test() {
             Error::<Test>::NotReachedMinimumDecision
         );
 
+        System::set_block_number(2000);
+
+        full_schelling_game_func2(4, 2000);
+
         System::set_block_number(3000);
 
-        full_schelling_game_func2(4, 3000);
-
-        System::set_block_number(4000);
-
-        full_schelling_game_func2(5, 4000);
+        full_schelling_game_func2(5, 3000);
 
         let incentive_count = ProjectTips::incentives_count(14).unwrap();
 
@@ -1093,5 +1093,61 @@ fn schelling_game_incentives_get_test() {
         };
 
         assert_eq!(incentive_count, incentive_count_eq);
+        for x in 4..20 {
+            System::set_block_number(x * 1000);
+            full_schelling_game_func(x, x * 1000);
+        }
+
+        let incentive_count = ProjectTips::incentives_count(14).unwrap();
+
+        let incentive_count_eq: Incentives<Test> = Incentives {
+            number_of_games: 20,
+            winner: 18,
+            loser: 2,
+            total_stake: 14 * 100 *20,
+            start: WhenDetails {
+                block: 201,
+                time: 0,
+            },
+        };
+
+        assert_eq!(incentive_count, incentive_count_eq);
+        // println!("incentive count:{:?}", incentive_count);
+
+        let balance = Balances::free_balance(14);
+
+        // println!("balance account before(14):{:?}", balance);
+
+        assert_ok!(ProjectTips::get_incentives(RuntimeOrigin::signed(14)));
+
+        let balance = Balances::free_balance(14);
+
+        // println!("balance account after(14):{:?}", balance);
+
+        let incentive_count = ProjectTips::incentives_count(15).unwrap();
+
+        let incentive_count_eq: Incentives<Test> = Incentives {
+            number_of_games: 20,
+            winner: 2,
+            loser: 18,
+            total_stake: 14 * 100 *20,
+            start: WhenDetails {
+                block: 201,
+                time: 0,
+            },
+        };
+
+        assert_eq!(incentive_count, incentive_count_eq);
+        // println!("incentive count:{:?}", incentive_count);
+
+        let balance = Balances::free_balance(15);
+
+        // println!("balance account before(15):{:?}", balance);
+
+        assert_ok!(ProjectTips::get_incentives(RuntimeOrigin::signed(15)));
+
+        let balance = Balances::free_balance(15);
+
+        // println!("balance account after(15):{:?}", balance);
     })
 }
