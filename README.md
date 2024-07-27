@@ -1,3 +1,33 @@
+# Shivarthu
+
+### Decentralized democracy with experts as leaders.
+
+https://shivarthu.reaudito.com/#/
+
+## Leptos/Rust Frontend
+
+https://github.com/reaudito/shivarthu-client
+
+## React Frontend (archieved)
+
+https://github.com/amiyatulu/shivarthu_frontend
+
+## Whitepaper
+
+https://shivarthu.reaudito.com/paper/Shivarthu_whitepaper.pdf
+
+## Technical Details
+
+https://github.com/reaudito/shivarthu/blob/main/docs/Shivarthu.md
+
+### Single-Node Development Chain
+
+This command will start the single-node development chain with persistent state:
+
+```bash
+./target/release/container-chain-simple-node--dev
+```
+
 <p align="center">
   <img src="media/tanssi.png" width="360">
 </p>
